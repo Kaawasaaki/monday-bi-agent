@@ -19,16 +19,17 @@ st.set_page_config(
 # --- Custom CSS for Professional Look ---
 st.markdown("""
     <style>
-    .main { background-color: #f8f9fa; }
-    .stMetric { 
-        border: 1px solid #e1e4e8; 
-        padding: 15px; 
-        border-radius: 5px; 
-        background-color: #ffffff;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    .main { background-color: #0e1117; }
+    div[data-testid="stMetric"] {
+        background-color: #1e2130;
+        border: 1px solid #31333f;
+        padding: 15px 20px;
+        border-radius: 10px;
+        color: #ffffff;
     }
-    div[data-testid="stExpander"] { border: none !important; box-shadow: none !important; }
-    .stButton>button { width: 100%; border-radius: 5px; font-weight: 600; }
+    /* This makes the labels and values readable */
+    div[data-testid="stMetricLabel"] > div { color: #808495 !important; }
+    div[data-testid="stMetricValue"] > div { color: #ffffff !important; }
     </style>
 """, unsafe_allow_html=True)
 
