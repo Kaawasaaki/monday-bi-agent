@@ -83,20 +83,27 @@ if st.session_state.deals_df is not None:
     # --- Executive Dashboard Header ---
     col1, col2, col3, col4 = st.columns(4)
     
-    total_pipeline = st.session_state.deals_df['revenue'].sum()
-    active_orders = len(st.session_state.orders_df)
-    mining_revenue = st.session_state.deals_df[st.session_state.deals_df['sector'].str.contains('Mining', na=False)]['revenue'].sum()
+    # Force conversion to numeric to prevent string concatenation errors
+    deals_rev = pd.to_numeric(st.session_state.deals_df['revenue'], errors='coerce').fillna(0)
+    orders_df = st.session_state.orders_df
+    
+    total_pipeline = deals_rev.sum()
+    active_orders = len(orders_df)
+    
+    # Filter for Mining sector and ensure it is numeric
+    mining_mask = st.session_state.deals_df['sector'].str.contains('Mining', na=False)
+    mining_revenue = pd.to_numeric(st.session_state.deals_df[mining_mask]['revenue'], errors='coerce').fillna(0).sum()
     
     with col1:
-        st.metric("Total Pipeline Value", f"INR {total_pipeline:,.2f}")
+        st.metric("Total Pipeline Value", f"INR {float(total_pipeline):,.2f}")
     with col2:
         st.metric("Active Work Orders", active_orders)
     with col3:
-        st.metric("Mining Sector Value", f"INR {mining_revenue:,.2f}")
+        st.metric("Mining Sector Value", f"INR {float(mining_revenue):,.2f}")
     with col4:
-        status = "Operational" if not st.session_state.deals_df.empty else "Offline"
+        # Check system health based on data presence
+        status = "Operational" if not st.session_state.deals_df.empty else "No Data"
         st.metric("System Status", status)
-
     st.markdown("### Conversational Analysis")
     
     # --- Chat History Container ---
