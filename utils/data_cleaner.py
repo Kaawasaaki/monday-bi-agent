@@ -6,11 +6,11 @@ def clean_business_data(df):
         return df
     df = df.dropna(how='all').dropna(axis=1, how='all')
     
-    # Identify numeric columns
+    
     numeric_keywords = ['Amount', 'Value', 'Rupees', 'Quantity', 'Billed', 'Collected']
     for col in df.columns:
         if any(key in col for key in numeric_keywords):
-            # STRICTOR CLEANING: Remove everything except digits and dots
+            
             df[col] = df[col].astype(str).str.replace(r'[^\d.]', '', regex=True)
             df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0).astype(float)
 
