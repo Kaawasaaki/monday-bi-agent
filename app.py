@@ -9,14 +9,14 @@ from agent.agent_factory import create_bi_agent
 
 load_dotenv()
 
-# --- Page Configuration ---
+
 st.set_page_config(
     page_title="Business Intelligence Console | Skylark Drones",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# --- Custom CSS for Professional Look ---
+
 st.markdown("""
     <style>
     .main { background-color: #0e1117; }
@@ -33,7 +33,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- Session State Initialization ---
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "deals_df" not in st.session_state:
@@ -41,7 +41,7 @@ if "deals_df" not in st.session_state:
 if "orders_df" not in st.session_state:
     st.session_state.orders_df = None
 
-# --- Sidebar: System Configuration ---
+
 with st.sidebar:
     st.title("System Control")
     st.markdown("---")
@@ -75,23 +75,22 @@ with st.sidebar:
                 else:
                     st.sidebar.error("Synchronization failed. Validate Board IDs.")
 
-# --- Main Console Layout ---
+
 st.title("Business Intelligence Management Console")
 st.caption("Skylark Drones Operations and Sales Pipeline Analysis")
 st.markdown("---")
 
 if st.session_state.deals_df is not None:
-    # --- Executive Dashboard Header ---
     col1, col2, col3, col4 = st.columns(4)
     
-    # Force conversion to numeric to prevent string concatenation errors
+    
     deals_rev = pd.to_numeric(st.session_state.deals_df['revenue'], errors='coerce').fillna(0)
     orders_df = st.session_state.orders_df
     
     total_pipeline = deals_rev.sum()
     active_orders = len(orders_df)
     
-    # Filter for Mining sector and ensure it is numeric
+    
     mining_mask = st.session_state.deals_df['sector'].str.contains('Mining', na=False)
     mining_revenue = pd.to_numeric(st.session_state.deals_df[mining_mask]['revenue'], errors='coerce').fillna(0).sum()
     
@@ -102,19 +101,18 @@ if st.session_state.deals_df is not None:
     with col3:
         st.metric("Mining Sector Value", f"INR {float(mining_revenue):,.2f}")
     with col4:
-        # Check system health based on data presence
         status = "Operational" if not st.session_state.deals_df.empty else "No Data"
         st.metric("System Status", status)
     st.markdown("### Conversational Analysis")
     
-    # --- Chat History Container ---
+
     chat_container = st.container()
     with chat_container:
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
 
-    # --- Chat Input ---
+    
     if prompt := st.chat_input("Enter business query..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
