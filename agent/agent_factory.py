@@ -20,13 +20,13 @@ def create_bi_agent(api_key):
         cross_reference_analysis
     ]
     
-    # This pulls the official tool-calling prompt
+    
     prompt = hub.pull("hwchase17/openai-tools-agent")
     
-    # This ensures your "Founder" persona is active
+    
     prompt.messages[0].prompt.template = SYSTEM_PROMPT
     
-    # This is the modern standard for 0.3.x
+    
     agent = create_tool_calling_agent(llm, tools, prompt)
     
     return AgentExecutor(
