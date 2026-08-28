@@ -8,11 +8,11 @@ class MondayClient:
         self.url = "https://api.monday.com/v2"
         self.headers = {
             "Authorization": self.api_key,
-            "API-Version": "2024-01"  # Updated to the latest stable version
+            "API-Version": "2024-01" 
         }
 
     def fetch_board(self, board_id):
-        # We use a simpler query first to see if we can just reach the board
+        
         query = """
         query ($boardId: [ID!]) {
           boards (ids: $boardId) {
@@ -39,7 +39,7 @@ class MondayClient:
             )
             res_data = response.json()
             
-            # This will print the REAL error in your VS Code terminal
+            
             if "errors" in res_data:
                 print(f"MONDAY API ERROR: {res_data['errors']}")
                 return pd.DataFrame()
